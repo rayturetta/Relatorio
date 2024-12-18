@@ -138,6 +138,8 @@ SIZE_CHOICES = {
 class Activity (models.Model):
     code = models.CharField(max_length=7)
     description =  models.CharField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = "activities"
@@ -151,6 +153,8 @@ class Contact (models.Model):
     phone = models.CharField(max_length=11)
     email = models.CharField(unique=True)
     # institution
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = "contacts"
@@ -162,12 +166,26 @@ class Contact (models.Model):
 class Society (models.Model):
     contact = models.ForeignKey(Contact, on_delete=models.CASCADE)
     responsibility = models.CharField(RESPONSIBILITY_CHOICES)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = "societies"
 
     def __str__(self):
         return f"{ self.responsibility } - { self.contact}"
+
+
+class Group (models.Model):
+    name = models.CharField(max_length=150, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "groups"
+
+    def __str__(self):
+        return self.name
 
 
 class Company (models.Model):
@@ -184,6 +202,7 @@ class Company (models.Model):
     zip_code = models.CharField(max_length=8)
     nature_legal = models.CharField(choices=NATURE_LEGAL_CHOICES)
     society = models.ForeignKey(Society, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
     situation = models.CharField(max_length=7)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -194,6 +213,9 @@ class Company (models.Model):
 
     def __str__(self):
         return f"{ self.name } - { self.cnpj}"
+    
+
+    
 
 
 
